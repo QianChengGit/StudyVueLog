@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>计算属性—姓名案例（watch监视实现）</title>
+		<script type="text/javascript" src="js/vue.js" ></script>
+	</head>
+	<body>
+		<!--
+			computed和watch之间的区别：
+				1.computed能实现的功能，watch都能实现；
+				2.watch能完成的功能，computed不一定能完成（比如：watch可以进行异步操作）
+			两个重要的小原则：
+				1.所有被Vue管理的函数，最好写成普通函数，这样this的指向才是vm或者组件实例对象；
+				2.所有不被Vue管理的函数（定时器回调函数，ajax回调函数等），最好写成箭头函数，这样this的指向才是vm或者组件实例对象；
+		-->
+		<div id="root">
+			姓：<input type="text" v-model="firstName" /><br /><br />
+			名：<input type="text" v-model="lastName" /><br /><br />
+			姓名：<span>{{fullName}}</span>
+		</div>
+	</body>
+	
+	<script>
+		Vue.config.productionTip = false //阻止Vue在启动时生成生产提示
+		const vm = new Vue({
+			el:'#root',
+			data:{
+				firstName:'张',
+				lastName:'三',
+				fullName:'张-三'
+			},
+			/*computed:{
+				//完整写法
+				fullName:{
+					//当有人读取fullName属性时，就会调用get()，且返回值作为fullName的属性值
+					//get()调用的时机：1.初次读取fullName时。2.所依赖的数据发生改变时。
+					get(){
+						return this.firstName+'-'+this.lastName
+					},
+					//set()调用的时机：1.当fullName被修改时时。
+					set(value){
+						const arr = value.split('-')
+						this.firstName = arr[0]
+						this.lastName = arr[1]
+					}
+				},
+			},*/
+			watch:{
+				firstName:{
+					handler(newValue){
+						//定时器回调函数,延迟1秒设值
+						setTimeout(()=>{//不是Vue管理的函数，写为箭头函数的this是vm或组件实例对象；
+							console.log(this)
+							this.fullName = newValue + '-' +this.lastName
+						},1000);
+						
+//						setTimeout(function(){//不是Vue管理的函数，写为普通函数的this不是vm或组件实例对象；
+//							console.log(this)
+//							this.fullName = newValue + '-' +this.lastName
+//						},1000);
+					}
+				},
+				lastName:{
+					handler(newValue){
+						this.fullName = this.firstName + '-' + newValue
+					}
+				}
+			}
+		})
+	</script>
+</html>

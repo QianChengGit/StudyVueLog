@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>监视属性-天气案例</title>
+		<script type="text/javascript" src="js/vue.js" ></script>
+	</head>
+	<body>
+		<!--
+			监视属性watch：
+				1.当被监视的属性发生变化时，handler回调函数会自动调用，执行相关操作；
+				2.监视的属性必须存在，才能被监视；
+				3.监视的两种方法：
+					(1).new Vue时传入watch配置；
+					(2).通过vm.$watch()监视；
+		-->
+		<div id="root">
+			<h2>今天天气很{{info}}！</h2>
+			<button @click="change">切换天气</button>
+		</div>
+	</body>
+	
+	<script>
+		Vue.config.productionTip = false //阻止Vue在启动时生成生产提示
+		const vm = new Vue({
+			el:'#root',
+			data:{
+				isHost: true
+			},
+			methods:{
+				change(){
+					this.isHost = !this.isHost
+				}
+			},
+			computed:{
+				info(){
+					return this.isHost?'炎热':'凉爽'
+				}
+			},
+			//监视属性第一种写法
+			/*watch:{//监视
+				//监视isHost属性
+				isHost:{
+					immediate:true,//初始化时，让handler函数调用一下。
+					//handler什么时候调用？当isHost发生改变时。
+					handler(newValue,oldValue){
+						console.log('isHost发生改变,改变前：'+oldValue+'  改变后：'+newValue)
+					}
+				}
+			}*/
+		})
+		
+		//监视属性第二种写法
+		vm.$watch('isHost',{
+			immediate:true,//初始化时，让handler函数调用一下。
+			//handler什么时候调用？当isHost发生改变时。
+			handler(newValue,oldValue){
+				console.log('isHost发生改变,改变前：'+oldValue+'  改变后：'+newValue)
+			}						
+		})
+	</script>
+</html>

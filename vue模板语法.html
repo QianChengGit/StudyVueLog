@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>vue模板语法</title>
+		<script type="text/javascript" src="js/vue.js" ></script>
+	</head>
+	
+	<body>
+		<!--
+			vue模板语法有两大类：
+			1.插值语法：
+				功能：用于解析标签体内容；
+				写法：{{xxx}}，xxx为js表达式，且可以直接读取到data里的所有属性；
+			2.指令语法：
+				功能：用于标签（包括：标签属性、标签体内容、绑定事件······）；
+				写法：v-bind:href="xxx" 或简写为 :href="xxx"，xxx同样为js表达式，且可以直接读取到data里的所有属性；
+				备注：Vue中有很多的Vue指令，且形式都是v-????，此处只是拿v-bind举例；
+			
+		-->
+		<!--准备一个容器-->
+		<div id="root">
+			<h1>插值语法</h1>
+			<h3>hello, {{name}}!</h3>
+			<hr />
+			<h1>指令语法</h1>
+			<!--'v-bind:'绑定数据，可以将标签里的属性的值和Vue实例里的data里的属性绑定,'v-bind:'可以简写为':'-->
+			<a v-bind:href="url">点我去百度</a>
+			<a :href="url">点我去百度</a>
+			<hr />
+		</div>
+		
+	</body>
+	
+	<script>
+		Vue.config.productionTip = false //阻止Vue在启动时生成生产提示
+		new Vue({
+			el:'#root',
+			data:{
+				name:'jack',
+				url:'https://www.baidu.com'
+			}
+		})
+	</script>
+</html>

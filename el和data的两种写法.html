@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>el和data的两种写法</title>
+		<script type="text/javascript" src="js/vue.js" ></script>
+	</head>
+	<body>
+		<!--
+			el和data的两种写法：
+				1.el有两种写法：
+					（1）new Vue时候配置el属性；
+					（2）先创建Vue实例，然后再通过v.$mount('#root')指定el的值；
+				2.data有两种写法：
+					（1）对象式
+					（2）函数式
+					如何选择：目前使用哪种都可以，以后学习到Vue组件时，data必须使用函数式，否则会报错；
+				3.一个重要的原则：
+					由Vue管理的函数，一定不要写箭头函数，一旦写了箭头函数，this就不是Vue实例；
+		-->
+		
+		<!--准备一个容器-->
+		<div id="root">
+			
+			<h2>你好，{{name}}</h2>
+		</div>
+	</body>
+	
+	<script>
+		Vue.config.productionTip = false //阻止Vue在启动时生成生产提示
+		//el的两种写法：
+//		const v = new Vue({
+//			//el的第一种写法
+//			//el:'#root',
+//			data:{
+//				name:'jack',
+//			}
+//		})
+//		
+//		console.log(v)
+//		//el的第二种写法，比较灵活
+//		v.$mount('#root')
+//		
+//		延迟1秒绑定容器
+//		setTimeout(()=>{
+//			v.$mount('#root')
+//		},1000)
+		
+		//data的两种写法：
+		new Vue({
+			el:'#root',
+			//data的第一种写法，对象式
+			/*data:{
+				name:'jack'
+			}*/
+			
+			
+			//data的第二种写法，函数式
+			data:function(){
+				console.log('@@@',this)//此处的this是Vue实例对象
+				return{
+					name:'jack'
+				}
+			}
+			
+			//简写
+//			data(){
+//				console.log('@@@',this)//此处的this是Vue实例对象
+//				return{
+//					name:'jack01'
+//				}
+//			}
+			
+			//错误示范，箭头函数
+//			data:()=>{
+//				console.log('@@@',this)//此处的this不是Vue实例对象
+//				return{
+//					name:'jack'
+//				}
+//			}
+		})
+	</script>
+</html>

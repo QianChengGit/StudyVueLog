@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>深度监视属性-天气案例</title>
+		<script type="text/javascript" src="js/vue.js" ></script>
+	</head>
+	<body>
+		<!--
+			深度监视：
+				1.Vue中的watch默认不监视对象内部值的改变（一层）；
+				2.配置deep:true可以监视对象内部值的改变（多层）；
+			备注：
+				1.Vue自身可以监视对象内部值的改变，但Vue提供的watch默认不可以；
+				2.使用watch时根据数据的具体结构，决定是否采用深度监视；
+		-->
+		<div id="root">
+			<h2>今天天气很{{info}}！</h2>
+			<button @click="change">切换天气</button>
+			<hr />
+			<h3>a的值是：{{numbers.a}}</h3>
+			<button @click="numbers.a++">点我让a+1</button>
+			<hr />
+			<h3>b的值是：{{numbers.b}}</h3>
+			<button @click="numbers.b++">点我让b+1</button>
+		</div>
+	</body>
+	
+	<script>
+		Vue.config.productionTip = false //阻止Vue在启动时生成生产提示
+		const vm = new Vue({
+			el:'#root',
+			data:{
+				isHost: true,
+				numbers:{
+					a:1,
+					b:2
+				}
+			},
+			methods:{
+				change(){
+					this.isHost = !this.isHost
+				}
+			},
+			computed:{
+				info(){
+					return this.isHost?'炎热':'凉爽'
+				}
+			},
+			watch:{//监视
+				//监视isHost属性的变化
+				isHost:{
+					//immediate:true,//初始化时，让handler函数调用一下。
+					//handler什么时候调用？当isHost发生改变时。
+					handler(newValue,oldValue){
+						console.log('isHost发生改变,改变前：'+oldValue+'  改变后：'+newValue)
+					}
+				},
+				//监视多级结构中“某个”属性的变化
+				/*'numbers.a':{
+					//immediate:true,//初始化时，让handler函数调用一下。
+					//handler什么时候调用？当isHost发生改变时。
+					handler(newValue,oldValue){
+						console.log('a发生改变,改变前：'+oldValue+'  改变后：'+newValue)
+					}
+				},*/
+				//监视多级结构中“所有”属性的变化
+				numbers:{
+					//immediate:true,//初始化时，让handler函数调用一下。
+					deep:true,//开启深度监视属性
+					handler(){
+						console.log('numbers发生改变')
+					}
+				}
+			},
+		})
+	</script>
+</html>
