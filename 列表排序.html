@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>列表排序</title>
+		<script type="text/javascript" src="js/vue.js" ></script>
+	</head>
+	<body>
+		<!--
+
+		-->
+		<div id="root">
+			<!--遍历数组类型数据-->
+			<h2>人员列表</h2>
+			<ul>
+				<input type="text" placeholder="请输入搜索名字" v-model="keyWord">
+				<button @click="sortType = 2">年龄升序</button>
+				<button @click="sortType = 1">年龄降序</button>
+				<button @click="sortType = 0">原顺序</button>
+				<li v-for="(p,index) in filterPersons" :key="p.id">
+					
+					{{p.name}}-{{p.age}}-{{p.sex}}
+				</li>
+			</ul>
+		</div>
+	</body>
+	
+	<script>
+		Vue.config.productionTip = false //阻止Vue在启动时生成生产提示
+		
+		//使用computed计算属性实现
+		new Vue({
+			el:'#root',
+			data:{
+				keyWord:'',
+				sortType:0,//原顺序：0，年龄降序：1，年龄升序：2
+				persons:[
+					{id:'001',name:'马冬梅',age:18,sex:'女'},
+					{id:'002',name:'周冬雨',age:28,sex:'女'},
+					{id:'003',name:'周杰伦',age:48,sex:'男'},
+					{id:'004',name:'邓伦',age:38,sex:'男'},
+				]
+			},
+			computed:{
+				filterPersons(){
+					const arr = this.persons.filter((p)=>{
+						return p.name.indexOf(this.keyWord) !== -1
+					})
+					//判断是否需要排序
+					//普通写法
+					//#region
+					/*if (this.sortType === 1) {
+						return arr.sort((a,b)=>{
+							return b.age-a.age
+						})
+					} else if (this.sortType === 2) {
+						return arr.sort((a,b)=>{
+							return a.age-b.age
+						})
+					} else {
+						return arr
+					}*/
+					//#endregion
+					//精简写法
+					if(this.sortType){
+						//数组排序
+						arr.sort((p1,p2)=>{
+							return this.sortType === 1 ? p2.age-p1.age : p1.age-p2.age
+						})
+					}
+
+					return arr
+				}
+			}
+		})
+	</script>
+</html>
