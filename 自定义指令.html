@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>自定义指令（函数式）</title>
+    <title>自定义指令</title>
      <!--引入Vue-->
 	<script type="text/jscript" src="js/vue.js"></script>
 </head>
@@ -12,47 +12,103 @@
     <!-- 
         1.需求1：定义一个v-big指令，与v-text指令类似，但会把绑定的数值放大10倍。
         2.需求2：定义一个v-fbind指令，与v-bind指令类似，但可以让其所绑定的input元素默认获取焦点。
+        自定义指令总结：
+            一、定义语法：
+                1.局部指令：
+                    new Vue({                                       new Vue({
+                        directives:{指令名:配置对象}     或              directives(){}
+                    })                                              })
+                2.全局指令：
+                    Vue.directive('指令名',配置对象)     或          Vue.directive('指令名',回调函数) 
+            二、配置对象中常用的三个回调：
+                1.bind(element,binding)：指令与元素成功绑定时被调用
+                2.inserted(element,binding)：指令所在元素被插入页面时被调用
+                3.update(element,binding)：指令所在的模板被重新解析时被调用
+            三、备注：
+                1.指令定义时不加v-，但使用时要加v-前缀；
+                2.指令名如果是多个单词时，要使用kebab-case命名方式，不要使用camelCase命名；
      -->
     <div id="root">
         <h2>当前的n值是：<span v-text="n"></span></h2>
+        <!-- <h2>放大10倍的n值是：<span v-big-number="n"></span></h2> -->
         <h2>放大10倍的n值是：<span v-big="n"></span></h2>
         <button @click="n++">点我n+1</button>
         <hr>
         <input type="text" v-fbind:value="n">
     </div>
+
+    <div id="root2">
+        <!-- 使用全局指令 -->
+        <input type="text" v-fbind:value="n">
+    </div>
 </body>
 <script>
     Vue.config.productionTip = false //阻止Vue在启动时生成生产提示
+    //定义全局指令
+    Vue.directive('fbind',{
+         //指令与元素成功绑定时被调用
+         bind(element,binding){
+            console.log('bind')
+            element.value = binding.value
+        },
+        //指令所在元素被插入页面时被调用
+        inserted(element,binding){
+            console.log('inserted')
+            element.focus()
+        },        
+        //指令所在的模板被重新解析时被调用
+        update(element,binding){
+            console.log('update')
+            element.value = binding.value
+        }
+    })
 
     new Vue({
         el:'#root',
         data:{
             n:1,
         },
+        //定义局部指令
         directives:{
+            //函数式（普通写法）
+            /**
+            'big-number':function(element,binding){
+            //    console.log(element,binding.value) //element是真实DOM标签，binding是真实DOM标签的属性对象
+                element.innerText = binding.value * 10 //将绑定的值乘以10放入DOM中
+            },
+            */
+            //函数式（简写）
             //big函数何时被调用？1.指令与元素成功绑定时。2.指令所在的模板被重新解析时。
             big(element,binding){
             //    console.log(element,binding.value) //element是真实DOM标签，binding是真实DOM标签的属性对象
                 element.innerText = binding.value * 10 //将绑定的值乘以10放入DOM中
             },
-            fbind:{
-                //指令与元素成功绑定时被调用
-                bind(element,binding){
-                    console.log('bind')
-                    element.value = binding.value
-                },
-                //指令所在元素被插入页面时被调用
-                inserted(element,binding){
-                    console.log('inserted')
-                    element.focus()
-                },
-                //指令所在的模板被重新解析时被调用
-                update(element,binding){
-                    console.log('update')
-                    element.value = binding.value
-                }
-            }
+            //对象式式指令
+            // fbind:{
+            //     //指令与元素成功绑定时被调用
+            //     bind(element,binding){
+            //         console.log('bind')
+            //         element.value = binding.value
+            //     },
+            //     //指令所在元素被插入页面时被调用
+            //     inserted(element,binding){
+            //         console.log('inserted')
+            //         element.focus()
+            //     },
+            //     //指令所在的模板被重新解析时被调用
+            //     update(element,binding){
+            //         console.log('update')
+            //         element.value = binding.value
+            //     }
+            // }
         }
+    })
+
+    new Vue({
+        el:'#root2',
+        data:{
+            n:5,
+        },
     })
 </script>
 </html>
