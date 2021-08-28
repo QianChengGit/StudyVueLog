@@ -34,29 +34,38 @@
             }
         },
         beforeCreate() {
+            // 此时无法通过vm访问到data中的数据和methods中的方法。
             console.log('beforeCreate')
         },
         created() {
+             // 此时可以通过vm访问到data中的数据和methods中配置的方法。
             console.log('created')
             // console.log(this)
             // 调试断点
             // debugger
         },
         beforeMount() {
+            // 此时页面呈现的是未经Vue编译的DOM结构，所有对DOM的操作最终都不奏效。
             console.log('beforeMount')
         },
         //Vue完成模板解析并把初始的真实DOM元素放入页面后（这个过程称为完成挂载）调用mounted()函数（只调用一次）
         mounted() {
+             // 此时页面呈现的是经Vue编译过的DOM结构，所有对DOM的操作均奏效（尽可能避免）。
+            //  至此初始化过程结束，一般在此进行：开启定时器、发送网络请求、订阅消息、绑定自定义事件等初始化操作。
             console.log('mounted')
             
         },
         beforeUpdate() {
+            // 此时数据是新的，但页面是旧的。即：页面尚未和数据保持同步。
             console.log('beforeUpdate')
         },
         updated() {
+             // 此时数据是新的，页面也是新的。即：页面和数据保持同步。
             console.log('updated')
         },
         beforeDestroy() {
+            // 此时vm中所有的data、methods、指令等等，都处于可用状态，马上要执行销毁过程。
+            // 一般在此进行：关闭定时器、取消消息订阅、解绑自定义事件等收尾操作。
             console.log('beforeDestroy')
         },
         destroyed() {
