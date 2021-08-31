@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>render函数</title>
+		<!--引入Vue-->
+		<script type="text/jscript" src="js/vue.js"></script>
+	</head>
+	<body>
+		<!--准备一个容器-->
+		<div id="root">
+	
+		</div>
+		
+	</body>
+	<script>
+		Vue.config.productionTip = false //阻止Vue在启动时生成生产提示
+			
+		//创建一个Vue实例
+		new Vue({
+			el:'#root',//选择关联id为root的容器，并为其创建Vue实例
+			// template:'<h1>你好啊</h1>',
+			/**
+			* 关于不同版本的Vue：
+			*  1.vue.js与vue.runtime.xxx.js的区别：
+			*    (1).vue.js是完整版的Vue，包含：核心功能+模板解析器；
+			*    (2).vue.runtime.xxx.js是运行版的Vue，只包含：核心功能，没有模板解析器；
+			* 
+			*  2.因为vue.runtime.xxx.js没有模板解析器，所以不能用template配置项，需要使用render函数
+			*    接收到createElement函数去指定具体内容；
+			*/
+			render(h) {
+				return h('h1','你好啊')
+			},	
+			//简写
+			// render:h => h('h1','你好啊')
+		})			
+	</script>
+</html>
